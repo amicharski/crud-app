@@ -1,30 +1,27 @@
-const users = require("../controller/users.controller");
+const users = require("../controller/users.controller.js");
+var express = require('express');
+var router = express.Router();
+const pathStart = "/api";
 
-module.exports = app => {
-    const users = require("../controller/users.controller.js");
+// Create a new User
+router.post(pathStart + "/users", users.create);
 
-    var router = require("express").Router();
+// Authenticates login credentials
+router.post(pathStart + "/login", users.login);
 
-    // Create a new User
-    router.post("/", users.create);
+// Retrieve all Users
+router.get("/", users.findAll);
 
-    // Retrieve all Users
-    router.get("/", users.findAll);
+// Retrieve all Users
+router.get("/getUser", users.findAllUsers);
 
-    // Retrieve all Users
-    router.get("/users", users.findAllUsers);
+// Retrieve a single User with id
+router.get("/:id", users.findOne);
 
-    // Retrieve a single User with id
-    router.get("/:id", users.findOne);
+// Update a User with id
+router.put("/:id", users.update);
 
-    // Update a User with id
-    router.put("/:id", users.update);
+// Delete a User with id
+router.delete("/:id", users.delete);
 
-    // Delete a User with id
-    router.delete("/:id", users.delete);
-
-    // Authenticates login credentials
-    router.get("/login", users.login);
-
-    app.use('/api/users', router);
-};
+module.exports = router;

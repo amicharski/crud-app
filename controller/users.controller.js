@@ -5,20 +5,24 @@ const Op = db.Sequelize.Op;
 
 // User Login
 exports.login = (req, res) => {
+    console.log("User being logged in");
     const loginCredentials = {
         username: req.body.username,
         password: crypto.createHash("md5").update(req.body.password).digest("hex")
     };
     const user = Users.findOne({ where: { username: user.username } });
     if(user.password === loginCredentials.password){
-        return true;
+        console.log("Login successful");
+        res.send(true);
     } else {
-        return false;
+        console.log("Invalid username and/or password");
+        res.send(false);
     }
-}
+};
 
 // Create and Save a new user
 exports.create = (req, res) => {
+    console.log("User being created");
     const user = {
         username: req.body.username,
         email: req.body.email,

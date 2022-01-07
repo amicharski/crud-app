@@ -4,25 +4,22 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var serveStatic = require('serve-static');
+var history = require('connect-history-api-fallback');
 
-var indexRouter = require('./routes/index');
+var indexRouter = require('./routes');
+var userRouter = require('./routes/users.routes.js');
 
 var app = express();
 
-// view engine setup
-//app.set('dist', path.join(__dirname, 'dist'));
-//app.set('view engine', '');
-
-app.use(serveStatic(__dirname + '/dist'))
+app.use(history());
+app.use(serveStatic(__dirname + '/dist'));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/login', indexRouter);
-app.use('/register', indexRouter);
+app.use('/', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,7 +34,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(res.locals.error);
 });
 
 module.exports = app;
