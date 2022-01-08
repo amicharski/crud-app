@@ -41,7 +41,7 @@ export default {
     }
   },
   methods: {
-    processRegister(){
+    async processRegister(){
       // validate everything
       if(this.username == null){
         this.usernameErrorMessage = "Username cannot be empty";
@@ -62,7 +62,7 @@ export default {
       } else {
         this.passwordErrorMessage = null;
       }
-      if(!this.password === this.passwordConf){
+      if(this.password !== this.passwordConf){
         this.passwordConfErrorMessage = "Passwords do not match";
       } else {
         this.passwordConfErrorMessage = null;
@@ -71,15 +71,17 @@ export default {
         this.emailErrorMessage == null &&
         this.passwordErrorMessage == null &&
         this.passwordConfErrorMessage == null){
-        alert("Everything is properly validated");
+        //alert("Everything is properly validated");
 
         // mysql implementation
 
-        UserDataService.create({
-          username: this.username,
-          email: this.email,
-          password: this.password
+        await UserDataService.create({
+          "username": this.username,
+          "email": this.email,
+          "password": this.password
         });
+
+        await this.$router.push("/login");
       }
     }
   }

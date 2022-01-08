@@ -1,7 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
+// import { createRouter } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import Register from "@/views/Register";
+import UserDashboard from "@/views/UserDashboard.vue";
+import Suspended from "@/views/Suspended.vue";
+import AdminPanel from "@/views/AdminPanel.vue";
 
 const routes = [
     {
@@ -18,6 +22,21 @@ const routes = [
         path: '/register',
         name: 'Register',
         component: Register
+    },
+    {
+        path: '/user/dashboard',
+        name: 'User Dashboard',
+        component: UserDashboard
+    },
+    {
+        path: '/suspended',
+        name: 'Suspended',
+        component: Suspended
+    },
+    {
+        path: '/admin/panel',
+        name: 'Admin Panel',
+        component: AdminPanel
     }
 ];
 

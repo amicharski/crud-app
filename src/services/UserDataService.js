@@ -9,6 +9,14 @@ class UserDataService {
         return http.get(`/users/${id}`);
     }
 
+    loginRoute(){
+        return http.get("/login");
+    }
+
+    authenticateLogin(data){
+        return http.post("/login", data);
+    }
+
     create(data){
         return http.post("/users", data);
     }
@@ -23,10 +31,6 @@ class UserDataService {
 
     findByUsername(username){
         return http.get(`/users?username=${username}`);
-    }
-
-    authenticateLogin(data){
-        return http.get("/login");
     }
 }
 
