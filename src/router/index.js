@@ -4,7 +4,7 @@ import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import Register from "@/views/Register";
 import UserDashboard from "@/views/User/Dashboard.vue";
-import AdminPanel from "@/views/AdminPanel.vue";
+import AdminConsole from "@/views/Admin/Console.vue";
 import NotFound from "@/views/NotFound.vue";
 const routes = [
     {
@@ -29,9 +29,10 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/admin/panel',
-        name: 'Admin Panel',
-        component: AdminPanel
+        path: '/admin/console',
+        name: 'Admin Console',
+        component: AdminConsole,
+        meta: { requiresAuth: true }
     },
     {
         path: '/:catchAll(.*)',
@@ -47,10 +48,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const loggedIn = localStorage.getItem("user");
+    // console.log("user account: ", loggedIn);
+    // console.log("user account type: ", loggedIn.accountType);
+    // const isAdmin = loggedIn.accountType === 5;
 
     if(to.matched.some(record => record.meta.requiresAuth) && !loggedIn){
         next('/');
     }
+
+    // if(to.matched.some(record => record.meta.requiresAdminAuth) && !isAdmin){
+    //     next('/');
+    // }
     next();
 });
 

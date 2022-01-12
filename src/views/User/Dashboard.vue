@@ -12,7 +12,7 @@ export default {
   name: "Dashboard",
   computed: {
     ...authComputed,
-    ...mapGetters(["getUsername"])
+    ...mapGetters(["getUsername", "getAccountType"])
   }
 }
 </script>

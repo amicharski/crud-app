@@ -1,6 +1,11 @@
 import httpCommon from '../http-common';
 import { createStore } from 'vuex';
 import axios from 'axios';
+import VuexPersistence from 'vuex-persist';
+
+const vuexLocal = new VuexPersistence({
+    storage: window.localStorage
+});
 
 export default new createStore({
     state: {
@@ -14,9 +19,9 @@ export default new createStore({
                 userData.token
             }`;
         },
-        LOGOUT(){
+        LOGOUT(state){
+            state.user = null;
             localStorage.removeItem("user");
-            location.reload();
         }
     },
     actions: {
@@ -42,6 +47,13 @@ export default new createStore({
         },
         getUsername(state){
             return state.user.username;
+        },
+        getAccountType(state){
+            return state.user.accountType;
+        },
+        getUser(state){
+            return state.user;
         }
-    }
+    },
+    plugins: [vuexLocal.plugin]
 })
