@@ -10,6 +10,7 @@ export default new createStore({
         SET_USER_DATA(state, userData){
             state.user = userData;
             localStorage.setItem("user", JSON.stringify(userData));
+            console.log("User Data: ", userData);
             axios.defaults.headers.common["Authorization"] = `Bearer ${
                 userData.token
             }`;
@@ -20,19 +21,17 @@ export default new createStore({
         }
     },
     actions: {
-        register({ commit }, credentials){
+        async register({ commit }, credentials){
             return httpCommon.post("users", credentials)
                 .then(({ data }) => {
-                    console.log("User Data: ", data);
                     commit("SET_USER_DATA", data);
                 });
         },
-        login({ commit }, credentials){
-            return httpCommon.post("login", credentials)
-                .then(({ data }) => {
-                    console.log("Data: " + data);
-                    commit("SET_USER_DATA", data);
-                });
+        async login({ commit }, credentials){
+            const { data } = await httpCommon.post("login", credentials);
+
+            commit("SET_USER_DATA", data);
+            return data;
         },
         logout({ commit }){
             commit("LOGOUT");

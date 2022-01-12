@@ -31,18 +31,20 @@ export default {
   methods: {
     async validateLogin(){
       // check database for matching password
-      const response = this.$store.dispatch("login", {
+      const response = await this.$store.dispatch("login", {
         "username": this.username,
         "password": this.password
       });
       console.log(response);
 
-      if(!response.data.successful){
-        this.loginErrorMessage = response.data.message;
+      if(!response.successful){
+        this.loginErrorMessage = response.message;
       } else {
         this.loginErrorMessage = null;
 
-        localStorage.setItem("token", response.data.token);
+        console.log("before token");
+        localStorage.setItem("token", response.token);
+        console.log("after token");
 
         await this.$router.push("/user/dashboard");
       }

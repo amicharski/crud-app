@@ -79,7 +79,7 @@ export default {
           "password": this.password
         });
 
-        await this.$router.push("/login");
+        await this.$router.push("/user/dashboard");
       }
     }
   }
