@@ -6,8 +6,13 @@
 </template>
 
 <script>
+import { authComputed } from "@/store/helpers";
+
 export default {
-  name: "Home"
+  name: "Home",
+  computed: {
+    ...authComputed
+  }
 }
 </script>
 

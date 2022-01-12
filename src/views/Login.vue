@@ -17,9 +17,6 @@
 </template>
 
 <script>
-import httpCommon from "@/http-common";
-
-// const crypto = require("crypto");
 
 export default {
   name: "Login",
@@ -34,7 +31,7 @@ export default {
   methods: {
     async validateLogin(){
       // check database for matching password
-      const response = await httpCommon.post("login", {
+      const response = this.$store.dispatch("login", {
         "username": this.username,
         "password": this.password
       });
@@ -45,22 +42,9 @@ export default {
       } else {
         this.loginErrorMessage = null;
 
-        // if(response.data === 0){
-        //   await this.$router.push("/suspended");
-        // } else {
-          // proceed to dashboard
+        localStorage.setItem("token", response.data.token);
 
-          // const user = {
-          //   username: this.username,
-          //   password: crypto.createHash("md5").update(this.password).digest("hex"),
-          //   accountType: response.data
-          // };
-
-          // await this.$store.dispatch("pushUserdata", user);
-          localStorage.setItem("token", (await response).data.token);
-
-          await this.$router.push("/user/dashboard");
-        // }
+        await this.$router.push("/user/dashboard");
       }
     }
   }

@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import httpCommon from "../http-common";
 
 export default {
   name: "Register",
@@ -73,9 +72,8 @@ export default {
         this.passwordConfErrorMessage == null){
         //alert("Everything is properly validated");
 
-        // mysql implementation
-
-        await httpCommon.post("users", {
+        // back-end stuff
+        this.$store.dispatch("register", {
           "username": this.username,
           "email": this.email,
           "password": this.password
