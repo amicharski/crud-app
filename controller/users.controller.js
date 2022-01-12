@@ -32,9 +32,10 @@ exports.login = async (req, res) => {
         "password": crypto.createHash("md5").update(req.body.password).digest("hex")
     };
     let returns = {
-        successful: null,
-        message: null,
-        accountType: null
+        "successful": null,
+        "message": null,
+        "username": req.body.username,
+        "accountType": null
     };
 
     let user = await Users.findOne({where: {username: loginCredentials.username}});
@@ -57,6 +58,7 @@ exports.login = async (req, res) => {
         returns.successful = false;
         returns.message = "Username and password do not match";
     }
+    console.log(returns);
     res.send(returns);
 };
 
