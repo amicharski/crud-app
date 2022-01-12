@@ -48,17 +48,16 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const loggedIn = localStorage.getItem("user");
-    // console.log("user account: ", loggedIn);
-    // console.log("user account type: ", loggedIn.accountType);
-    // const isAdmin = loggedIn.accountType === 5;
+    console.log("account type: ", localStorage.getItem("accountType"));
+    const isAdmin = localStorage.getItem("accountType") === "5";
 
     if(to.matched.some(record => record.meta.requiresAuth) && !loggedIn){
         next('/');
     }
 
-    // if(to.matched.some(record => record.meta.requiresAdminAuth) && !isAdmin){
-    //     next('/');
-    // }
+    if(to.matched.some(record => record.meta.requiresAdminAuth) && !isAdmin){
+        next('/');
+    }
     next();
 });
 
