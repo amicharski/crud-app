@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const db = require("../models");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
@@ -7,15 +9,7 @@ const jose = require("jose");
 
 exports.authenticate = (req, res) => {
     console.log("Authenticating");
-    jwt.verify(req.token, 'the_secret_key', err => {
-        if(err){
-            res.sendStatus(401);
-        } else {
-            res.json({
-                events: events
-            });
-        }
-    });
+    res.json();
 };
 
 /**
@@ -52,7 +46,8 @@ exports.login = async (req, res) => {
             returns.successful = true;
             returns.message = "Login successful";
             returns.accountType = user.account_type;
-            jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+            // const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+            // res.json({ accessToken: accessToken });
         } else {
             returns.successful = false;
             returns.message = "User account is suspended. Please contact a system administrator.";
@@ -182,4 +177,27 @@ exports.findAllUsers = (req, res) => {
                 message: err.message || "Some error occurred while retrieving users."
             });
         });
+};
+
+/***
+ * Utility Functions
+ */
+
+exports.verifyToken = (req, res, next) => {
+    console.log("token being verified");
+    const bearerHeader = req.headers['authorization'];
+
+    if (typeof bearerHeader !== 'undefined') {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if(token == null) return res.sendStatus(401);
+
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if(err) return res.sendStatus(403);
+            req.user = user;
+            next();
+        });
+    } else {
+        res.sendStatus(401);
+    }
 };

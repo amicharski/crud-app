@@ -20,6 +20,12 @@ module.exports = (connection, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false,
             defaultValue: 1
+        },
+        token: {
+            type: Sequelize.STRING(128)
+        },
+        token_expiration: {
+            type: Sequelize.DATE
         }
     }, {
         timestamps: false

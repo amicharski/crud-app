@@ -10,7 +10,7 @@ router.post(pathStart + "/users", users.create);
 router.post(pathStart + "/login", users.login);
 
 // Authenticate with jwt
-router.get(pathStart + "/jwtauth", verifyToken, users.authenticate);
+router.get(pathStart + "/jwtauth", users.verifyToken, users.authenticate);
 
 // Retrieve all Users
 router.get("/", users.findAll);
@@ -26,19 +26,5 @@ router.put("/:id", users.update);
 
 // Delete a User with id
 router.delete("/:id", users.delete);
-
-function verifyToken(req, res, next){
-    console.log("token being verified");
-    const bearerHeader = req.headers['authorization'];
-
-    if (typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        res.sendStatus(401);
-    }
-}
 
 module.exports = router;
