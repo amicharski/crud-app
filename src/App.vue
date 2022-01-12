@@ -1,12 +1,16 @@
 <template>
   <div id="app">
-    <nav>
+    <nav v-if="!loggedIn">
       <img alt="Profrec Logo" src="./assets/logo.png" width="100" height="100">
       <router-link :to="{ name: 'Home' }">Home</router-link> |
-      <router-link v-if="!loggedIn" :to="{ name: 'Login' }">Login</router-link>
-      <button v-else @click="logout">Logout</button>
-      <router-view />
+      <router-link :to="{ name: 'Login' }">Login</router-link>
     </nav>
+    <nav v-else>
+      <img alt="Profrec Logo" src="./assets/logo.png" width="100" height="100">
+      <button @click="dashboard">Dashboard</button> |
+      <button @click="logout">Logout</button>
+    </nav>
+    <router-view />
   </div>
 </template>
 
@@ -19,6 +23,9 @@ export default {
     ...authComputed
   },
   methods: {
+    dashboard(){
+      this.$router.push("/user/dashboard");
+    },
     logout(){
       this.$store.dispatch("logout");
     }

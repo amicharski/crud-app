@@ -9,7 +9,7 @@ import { authComputed } from '@/store/helpers.js';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "UserDashboard",
+  name: "Dashboard",
   computed: {
     ...authComputed,
     ...mapGetters(["getUsername"])

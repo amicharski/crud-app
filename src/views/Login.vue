@@ -35,16 +35,13 @@ export default {
         "username": this.username,
         "password": this.password
       });
-      console.log(response);
 
       if(!response.successful){
         this.loginErrorMessage = response.message;
       } else {
         this.loginErrorMessage = null;
 
-        console.log("before token");
         localStorage.setItem("token", response.token);
-        console.log("after token");
 
         await this.$router.push("/user/dashboard");
       }
