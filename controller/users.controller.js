@@ -1,23 +1,68 @@
 const db = require("../models");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 const Users = db.users;
 const Op = db.Sequelize.Op;
+const jose = require("jose");
 
-// User Login
-exports.login = (req, res) => {
+exports.authenticate = (req, res) => {
+    console.log("Authenticating");
+    jwt.verify(req.token, 'the_secret_key', err => {
+        if(err){
+            res.sendStatus(401);
+        } else {
+            res.json({
+                events: events
+            });
+        }
+    });
+};
+
+/**
+ * User Login
+ * @param req: body{
+ *     username: String,
+ *     password: String
+ * }
+ * @param res
+ * @returns {Promise<void>}: returns{
+ *     successful: bool,
+ *     message: String,
+ *     accountType: int
+ * }
+ */
+exports.login = async (req, res) => {
     console.log("User being logged in");
     const loginCredentials = {
-        username: req.body.username,
-        password: crypto.createHash("md5").update(req.body.password).digest("hex")
+        "username": req.body.username,
+        "password": crypto.createHash("md5").update(req.body.password).digest("hex")
     };
-    const user = Users.findOne({ where: { username: user.username } });
-    if(user.password === loginCredentials.password){
-        console.log("Login successful");
-        res.send(true);
+    let returns = {
+        successful: null,
+        message: null,
+        accountType: null
+    };
+
+    let user = await Users.findOne({where: {username: loginCredentials.username}});
+    if(!user){
+        returns.successful = false;
+        returns.message = "Invalid username";
+    } else if(user.password === loginCredentials.password) {
+        if(user.account_type !== 0){ // checking for suspension
+            returns.successful = true;
+            returns.message = "Login successful";
+            returns.accountType = user.account_type;
+            jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+        } else {
+            returns.successful = false;
+            returns.message = "User account is suspended. Please contact a system administrator.";
+            returns.accountType = user.account_type;
+        }
     } else {
-        console.log("Invalid username and/or password");
-        res.send(false);
+        returns.successful = false;
+        returns.message = "Username and password do not match";
     }
+    res.send(returns);
 };
 
 // Create and Save a new user

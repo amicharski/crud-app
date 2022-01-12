@@ -41,9 +41,9 @@ const uds = new UserDataService();
 function createAccount(){
     // http://localhost:8080/api/users
     uds.create({
-        username: "cmos",
-        email: "test@enron.com",
-        password: "password"
+        "username": "cmos",
+        "email": "test@enron.com",
+        "password": "password"
     }).catch(err => {
         console.log(err.message);
     });
@@ -52,8 +52,8 @@ function createAccount(){
 function userLogin(){
     // http://localhost:8080/api/login
     uds.authenticateLogin({
-        username: "test",
-        password: "password"
+        "username": "test",
+        "password": "passwor"
     }).catch(err => {
         console.log("OOF: " + err.message);
     });
