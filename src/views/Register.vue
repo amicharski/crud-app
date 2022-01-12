@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import UserDataService from "@/services/UserDataService";
+import httpCommon from "../http-common";
 
 export default {
   name: "Register",
@@ -75,7 +75,7 @@ export default {
 
         // mysql implementation
 
-        await UserDataService.create({
+        await httpCommon.post("users", {
           "username": this.username,
           "email": this.email,
           "password": this.password

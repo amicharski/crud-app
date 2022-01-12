@@ -6,6 +6,7 @@ import Register from "@/views/Register";
 import UserDashboard from "@/views/UserDashboard.vue";
 import Suspended from "@/views/Suspended.vue";
 import AdminPanel from "@/views/AdminPanel.vue";
+import UserLogout from "@/views/UserLogout";
 
 const routes = [
     {
@@ -37,6 +38,11 @@ const routes = [
         path: '/admin/panel',
         name: 'Admin Panel',
         component: AdminPanel
+    },
+    {
+        path: '/user/logout',
+        name: 'UserLogout',
+        component: UserLogout
     }
 ];
 

@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import UserDataService from "@/services/UserDataService";
+import httpCommon from "@/http-common";
 
-const crypto = require("crypto");
+// const crypto = require("crypto");
 
 export default {
   name: "Login",
@@ -34,29 +34,33 @@ export default {
   methods: {
     async validateLogin(){
       // check database for matching password
-      let result = await UserDataService.authenticateLogin({
+      const response = await httpCommon.post("login", {
         "username": this.username,
         "password": this.password
       });
+      console.log(response);
 
-      if(!result){
-        this.loginErrorMessage = "Username or Password is incorrect";
+      if(!response.data.successful){
+        this.loginErrorMessage = response.data.message;
       } else {
         this.loginErrorMessage = null;
 
-        if(result.data === 0){
-          await this.$router.push("/suspended");
-        } else {
+        // if(response.data === 0){
+        //   await this.$router.push("/suspended");
+        // } else {
           // proceed to dashboard
-          const user = {
-            username: this.username,
-            password: crypto.createHash("md5").update(this.password).digest("hex"),
-            accountType: result.data
-          };
-          this.$store.dispatch("pushUserdata", user).then(() => {
-            this.$router.push("/user/dashboard");
-          });
-        }
+
+          // const user = {
+          //   username: this.username,
+          //   password: crypto.createHash("md5").update(this.password).digest("hex"),
+          //   accountType: response.data
+          // };
+
+          // await this.$store.dispatch("pushUserdata", user);
+          localStorage.setItem("token", (await response).data.token);
+
+          await this.$router.push("/user/dashboard");
+        // }
       }
     }
   }

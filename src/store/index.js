@@ -2,23 +2,22 @@ import { createStore } from 'vuex';
 
 export default createStore({
     state: {
-        userdata: {},
-        username: null,
-        password: null,
-        accountType: null
+        userdata: {}
     },
     mutations: {
         LOGIN_USER(state, userdata){
             state.userdata = userdata;
-
-            state.username = userdata.username;
-            state.password = userdata.password;
-            state.accountType = userdata.accountType;
+        },
+        LOGOUT_USER(state){
+            state.userdata = null;
         }
     },
     actions: {
         pushUserdata({ commit }, userdata){
             return commit("LOGIN_USER", userdata);
+        },
+        nullUserdata({ commit }){
+            return commit("LOGOUT_USER");
         }
     }
 });
