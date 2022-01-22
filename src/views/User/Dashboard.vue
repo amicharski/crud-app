@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="getUsername">
     Welcome {{ getUsername }}
   </div>
 </template>

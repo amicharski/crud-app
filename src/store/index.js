@@ -15,14 +15,17 @@ export default new createStore({
         SET_USER_DATA(state, userData){
             state.user = userData;
             localStorage.setItem("user", JSON.stringify(userData));
-            localStorage.setItem("accountType", userData);
+            localStorage.setItem("accountType", userData.accountType);
+            localStorage.setItem("requirePasswordReset", userData.requirePasswordReset);
             axios.defaults.headers.common["Authorization"] = `Bearer ${
                 userData.token
             }`;
         },
-        LOGOUT(state){
-            state.user = null;
+        async LOGOUT(state){
             localStorage.removeItem("user");
+            localStorage.removeItem("accountType");
+            localStorage.removeItem("requirePasswordReset");
+            state.user = null;
         }
     },
     actions: {
@@ -34,9 +37,14 @@ export default new createStore({
         },
         async login({ commit }, credentials){
             const { data } = await httpCommon.post("login", credentials);
-
             commit("SET_USER_DATA", data);
             return data;
+        },
+        async update({ commit }, changes){
+            await httpCommon.put("/users/" + this.state.user.userID, changes);
+            const { data } = await httpCommon.get("/" + this.state.user.userID);
+            console.log("dataValues: ", data);
+            commit("SET_USER_DATA", data);
         },
         logout({ commit }){
             commit("LOGOUT");
@@ -47,13 +55,16 @@ export default new createStore({
             return !!state.user;
         },
         getUsername(state){
-            return state.user.username;
+            return state.user?.username;
         },
         getAccountType(state){
             return state.user.accountType;
         },
         getUser(state){
             return state.user;
+        },
+        getUserID(state){
+            return state.user.userID;
         }
     },
     plugins: [vuexLocal.plugin]
