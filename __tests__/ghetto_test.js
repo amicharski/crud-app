@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 var http = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://localhost:8080/session/",
     headers: {
         "Content-type": "application/json"
     }
@@ -9,7 +9,7 @@ var http = axios.create({
 
 class UserDataService {
     getAll(){
-        return http.get("/users");
+        return http.get("/getusers");
     }
 
     get(id){
@@ -59,4 +59,24 @@ function userLogin(){
     });
 }
 
-userLogin();
+function fetchUsers(){
+    http.get("/getusers").catch(err => {
+        console.log("OOF: " + err.message);
+    });
+}
+
+function forceUpdatePassword(){
+    http.put("/users/20", {
+        "require_password_at_login": "1"
+    }).catch(err => {
+        console.log("OOF: " + err.message);
+    });
+}
+
+function newSession(){
+    http.post("/session", {
+        "userID": null
+    });
+}
+
+newSession();

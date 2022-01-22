@@ -8,6 +8,7 @@ var history = require('connect-history-api-fallback');
 
 var indexRouter = require('./routes');
 var userRouter = require('./routes/users.routes.js');
+var sessionRouter = require('./routes/sessions.routes');
 
 var app = express();
 
@@ -18,8 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use('/api/', userRouter);
+app.use('/session/', sessionRouter);
 app.use('/', indexRouter);
-app.use('/', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

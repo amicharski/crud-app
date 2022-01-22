@@ -22,7 +22,9 @@ exports.authenticate = (req, res) => {
  * @returns {Promise<void>}: returns{
  *     successful: bool,
  *     message: String,
- *     accountType: int
+ *     accountType: int,
+ *     requirePasswordReset: bool
+ *     userID: int
  * }
  */
 exports.login = async (req, res) => {
@@ -35,7 +37,9 @@ exports.login = async (req, res) => {
         "successful": null,
         "message": null,
         "username": req.body.username,
-        "accountType": null
+        "accountType": null,
+        "requirePasswordReset": null,
+        "userID": null
     };
 
     let user = await Users.findOne({where: {username: loginCredentials.username}});
@@ -47,6 +51,8 @@ exports.login = async (req, res) => {
             returns.successful = true;
             returns.message = "Login successful";
             returns.accountType = user.account_type;
+            returns.requirePasswordReset = user.require_password_at_login;
+            returns.userID = user.ID;
             // const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
             // res.json({ accessToken: accessToken });
         } else {
@@ -83,6 +89,7 @@ exports.create = (req, res) => {
 
 // Retrieve all users from the database.
 exports.findAll = (req, res) => {
+    console.log("extracting users");
     const user = req.query.user;
     var condition = user ? { user: { [Op.like]: `%${user}%` } } : null;
 
@@ -104,7 +111,8 @@ exports.findOne = (req, res) => {
     Users.findByPk(id)
         .then(data => {
             if(data){
-                res.send(data);
+                //console.log("findOne: ", data);
+                res.json(data);
             } else {
                 res.status(404).send({
                     message: "Cannot find user with id=${id}"

@@ -26,6 +26,11 @@ module.exports = (connection, Sequelize) => {
         },
         token_expiration: {
             type: Sequelize.DATE
+        },
+        require_password_at_login: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: 0
         }
     }, {
         timestamps: false
